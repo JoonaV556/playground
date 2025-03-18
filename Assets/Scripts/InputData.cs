@@ -1,16 +1,23 @@
 using UnityEngine;
 
-public class InputData : MonoBehaviour
+public struct InputData : IPlayerInput
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public Vector2 Move;
+    public Vector2 Look;
+    public bool Jump;
+
+    bool IPlayerInput.GetJump()
     {
-        
+        return Jump;
     }
 
-    // Update is called once per frame
-    void Update()
+    Vector2 IPlayerInput.GetLook()
     {
-        
+        return Look;
+    }
+
+    Vector2 IPlayerInput.GetMove()
+    {
+        return Move;
     }
 }
