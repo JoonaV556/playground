@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IInputListener
 {
+    private Rigidbody _rb;
+
     public void FeedInput(IPlayerInput input)
     {
         Debug.Log("Move: " + input.GetMove());
@@ -17,6 +19,11 @@ public class PlayerController : MonoBehaviour, IInputListener
 
     // Update is called once per frame
     void Update()
+    {
+
+    }
+
+    private void FixedUpdate()
     {
 
     }
