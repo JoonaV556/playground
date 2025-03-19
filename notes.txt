@@ -1,3 +1,8 @@
 todo
 
-- ground movement (no slope)
+X - ground movement (no slope)
+X - fix camera rotation move jitter
+- Jumping
+- Crouching
+- Sneaking
+- Leaning
