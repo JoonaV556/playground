@@ -2,6 +2,8 @@ todo
 
 X - ground movement (no slope)
 X - fix camera rotation move jitter
+X - Sprinting
+X -- allow sprint only in look dir
 - Jumping
 - Crouching
 - Sneaking

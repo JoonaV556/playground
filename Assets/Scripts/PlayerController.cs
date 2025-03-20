@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour, IInputListener
     public Transform OrientationRoot;
 
     public float WalkForce = 10f;
+    public float SprintForce = 10f;
     public float LookMultiplier = 1f;
     public float CameraVerticalRotationUpperLimit = 90f;
     public float CameraVerticalRotationLowerLimit = -90f;
@@ -16,6 +17,8 @@ public class PlayerController : MonoBehaviour, IInputListener
     private IPlayerInput _input;
 
     private float _cameraRotVertical = 0;
+
+    private bool _sprinting = false;
 
     public void FeedInput(IPlayerInput input)
     {
@@ -28,27 +31,52 @@ public class PlayerController : MonoBehaviour, IInputListener
         _rb = GetComponent<Rigidbody>();
     }
 
+    private void Update()
+    {
+        if (_input == null) return;
+        UpdateSprint(_input.GetSprint(), _input.GetMove());
+        RotatePlayer();
+    }
+
     private void FixedUpdate()
     {
         if (_input == null) return;
 
-        MovePlayer();
+        MovePlayer(_input.GetMove(), GetMoveForce());
     }
 
-    private void Update()
+    private void UpdateSprint(bool SprintInput, Vector2 MoveInput)
     {
-        if (_input == null) return;
-        RotatePlayer();
-    }
+        // log mmove vector
+        Debug.Log(MoveInput);
 
-    private void MovePlayer()
-    {
-        // move player
-        Vector2 move = _input.GetMove();
-        if (move.magnitude > 0)
+        // handle sprinting 
+        if (!_sprinting && SprintInput && MovingForwards(MoveInput))
         {
-            Vector3 moveDir = OrientationRoot.TransformVector(new Vector3(move.x, 0, move.y)).normalized;
-            _rb.AddForce(moveDir * WalkForce, ForceMode.Force);
+            _sprinting = true;
+        }
+        else if (_sprinting && (!SprintInput || !MovingForwards(MoveInput)))
+        {
+            _sprinting = false;
+        }
+    }
+
+    private bool MovingForwards(Vector2 MoveInput)
+    {
+        return MoveInput.y > 0.9f && MoveInput.x < 0.5f;
+    }
+
+    private float GetMoveForce()
+    {
+        return _sprinting ? SprintForce : WalkForce;
+    }
+
+    private void MovePlayer(Vector2 MoveInput, float MoveForce)
+    {
+        if (MoveInput.magnitude > 0)
+        {
+            Vector3 moveDir = OrientationRoot.TransformVector(new Vector3(MoveInput.x, 0, MoveInput.y)).normalized;
+            _rb.AddForce(moveDir * MoveForce, ForceMode.Force);
         }
     }
 

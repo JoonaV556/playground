@@ -9,7 +9,8 @@ public class InputManager : MonoBehaviour
         {
             Move = _input.Move,
             Look = _input.Look,
-            Jump = _input.Jump
+            Jump = _input.Jump,
+            Sprint = _input.Sprint
         };
 
         return input;
@@ -21,6 +22,7 @@ public class InputManager : MonoBehaviour
     {
         Move = Vector2.zero,
         Look = Vector2.zero,
+        Sprint = false,
         Jump = false
     };
 
@@ -41,10 +43,6 @@ public class InputManager : MonoBehaviour
         _input.Move = InputActions["Move"].ReadValue<Vector2>();
         _input.Look = InputActions["Look"].ReadValue<Vector2>();
         _input.Jump = InputActions["Jump"].WasPerformedThisFrame();
-
-        // log the input data on separate lines
-        // Debug.Log("Move: " + _input.Move);
-        // Debug.Log("Look: " + _input.Look);
-        // Debug.Log("Jump: " + _input.Jump);
+        _input.Sprint = InputActions["Sprint"].IsPressed();
     }
 }
