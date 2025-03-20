@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour, IInputListener
     public float WalkForce = 10f;
     public float SprintForce = 10f;
     public float JumpForce = 1000f;
+    public float MoveForceMultiplierWhileInAir = 0.1f;
+    public float DragWhileOnGround = 5f;
+    public float DragWhileInAir = 0f;
     public float LookMultiplier = 1f;
     public float CameraVerticalRotationUpperLimit = 90f;
     public float CameraVerticalRotationLowerLimit = -90f;
@@ -41,11 +44,13 @@ public class PlayerController : MonoBehaviour, IInputListener
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _rb.linearDamping = DragWhileOnGround;
     }
 
     private void Update()
     {
         if (_input == null) return;
+        UpdateDrag();
         UpdateSprint(_input.GetSprint(), _input.GetMove());
         RotatePlayer();
         _grounded = IsGrounded();
@@ -58,8 +63,14 @@ public class PlayerController : MonoBehaviour, IInputListener
         MovePlayer(_input.GetMove(), GetMoveForce());
 
         // handle jumping
+        HandleJumping();
+    }
+
+    private void HandleJumping()
+    {
         if (_jumpPending && IsGrounded())
         {
+            _rb.linearDamping = DragWhileInAir;
             _rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
             _jumpPending = false;
         }
@@ -81,6 +92,11 @@ public class PlayerController : MonoBehaviour, IInputListener
         }
     }
 
+    private void UpdateDrag()
+    {
+        _rb.linearDamping = IsGrounded() ? DragWhileOnGround : DragWhileInAir;
+    }
+
     private bool IsGrounded()
     {
         return Physics.OverlapSphereNonAlloc(
@@ -98,7 +114,12 @@ public class PlayerController : MonoBehaviour, IInputListener
 
     private float GetMoveForce()
     {
-        return _sprinting ? SprintForce : WalkForce;
+        float force = _sprinting ? SprintForce : WalkForce;
+        if (!_grounded)
+        {
+            force *= MoveForceMultiplierWhileInAir;
+        }
+        return force;
     }
 
     private void MovePlayer(Vector2 MoveInput, float MoveForce)

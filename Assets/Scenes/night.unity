@@ -534,7 +534,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1600606154}
@@ -2110,6 +2110,22 @@ PrefabInstance:
     - target: {fileID: 3179261505726426398, guid: 3e468ce6ba164ab428a78744d764265a, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623712326555486743, guid: 3e468ce6ba164ab428a78744d764265a, type: 3}
+      propertyPath: JumpForce
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623712326555486743, guid: 3e468ce6ba164ab428a78744d764265a, type: 3}
+      propertyPath: DragWhileInAir
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623712326555486743, guid: 3e468ce6ba164ab428a78744d764265a, type: 3}
+      propertyPath: DragWhileOnGround
+      value: 10.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623712326555486743, guid: 3e468ce6ba164ab428a78744d764265a, type: 3}
+      propertyPath: MoveForceMultiplierWhileInAir
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 5779321644841927102, guid: 3e468ce6ba164ab428a78744d764265a, type: 3}
       propertyPath: m_LocalPosition.x
