@@ -8,9 +8,12 @@ public class PlayerController : MonoBehaviour, IInputListener
 
     public float WalkForce = 10f;
     public float SprintForce = 10f;
+    public float JumpForce = 1000f;
     public float LookMultiplier = 1f;
     public float CameraVerticalRotationUpperLimit = 90f;
     public float CameraVerticalRotationLowerLimit = -90f;
+
+    public LayerMask GroundLayers;
 
     private Rigidbody _rb;
 
@@ -19,10 +22,19 @@ public class PlayerController : MonoBehaviour, IInputListener
     private float _cameraRotVertical = 0;
 
     private bool _sprinting = false;
+    private bool _jumpPending = false;
+    /// <summary>
+    /// readonly, use IsGrounded() instead
+    /// </summary>
+    private bool _grounded = false;
 
     public void FeedInput(IPlayerInput input)
     {
         _input = input;
+        if (_input.GetJump() && !_jumpPending && IsGrounded())
+        {
+            _jumpPending = true;
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -36,6 +48,7 @@ public class PlayerController : MonoBehaviour, IInputListener
         if (_input == null) return;
         UpdateSprint(_input.GetSprint(), _input.GetMove());
         RotatePlayer();
+        _grounded = IsGrounded();
     }
 
     private void FixedUpdate()
@@ -43,6 +56,13 @@ public class PlayerController : MonoBehaviour, IInputListener
         if (_input == null) return;
 
         MovePlayer(_input.GetMove(), GetMoveForce());
+
+        // handle jumping
+        if (_jumpPending && IsGrounded())
+        {
+            _rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+            _jumpPending = false;
+        }
     }
 
     private void UpdateSprint(bool SprintInput, Vector2 MoveInput)
@@ -59,6 +79,16 @@ public class PlayerController : MonoBehaviour, IInputListener
         {
             _sprinting = false;
         }
+    }
+
+    private bool IsGrounded()
+    {
+        return Physics.OverlapSphereNonAlloc(
+            transform.position,
+            0.02f,
+            new Collider[1],
+            GroundLayers
+        ) > 0;
     }
 
     private bool MovingForwards(Vector2 MoveInput)

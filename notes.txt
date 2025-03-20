@@ -4,7 +4,8 @@ X - ground movement (no slope)
 X - fix camera rotation move jitter
 X - Sprinting
 X -- allow sprint only in look dir
-- Jumping
+X - Jumping
+-- disable drag while in air and when jump starts
 - Crouching
 - Sneaking
 - Leaning

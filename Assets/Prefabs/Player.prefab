@@ -188,9 +188,13 @@ MonoBehaviour:
   OrientationRoot: {fileID: 2204777329766422110}
   WalkForce: 7400
   SprintForce: 13500
+  JumpForce: 1000
   LookMultiplier: 0.06
   CameraVerticalRotationUpperLimit: 90
   CameraVerticalRotationLowerLimit: -90
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!114 &1397871569883232433
 MonoBehaviour:
   m_ObjectHideFlags: 0
