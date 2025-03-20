@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour, IInputListener
     public float SprintForce = 10f;
     public float JumpForce = 1000f;
     public float MoveForceMultiplierWhileInAir = 0.1f;
+    public float ExtraGravityWhileInAir = 10f;
     public float DragWhileOnGround = 5f;
     public float DragWhileInAir = 0f;
     public float LookMultiplier = 1f;
@@ -64,6 +66,12 @@ public class PlayerController : MonoBehaviour, IInputListener
 
         // handle jumping
         HandleJumping();
+
+        // apply extra gravity while in air
+        if (!IsGrounded())
+        {
+            _rb.AddForce(Vector3.down.normalized * ExtraGravityWhileInAir);
+        }
     }
 
     private void HandleJumping()

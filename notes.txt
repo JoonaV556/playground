@@ -5,7 +5,9 @@ X - fix camera rotation move jitter
 X - Sprinting
 X -- allow sprint only in look dir
 X - Jumping
--- disable drag while in air and when jump starts
+X -- disable drag while in air and when jump starts
+X - make jumping more snappy
+- Improve grounded detection
 - Crouching
 - Sneaking
 - Leaning
