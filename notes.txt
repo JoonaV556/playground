@@ -7,7 +7,7 @@ X -- allow sprint only in look dir
 X - Jumping
 X -- disable drag while in air and when jump starts
 X - make jumping more snappy
-- Improve grounded detection
+- Improve ground detection
 - Crouching
 - Sneaking
 - Leaning

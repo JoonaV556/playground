@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public struct InputData : IPlayerInput
+public struct InputData : ICharacterInput
 {
     public Vector2 Move;
     public Vector2 Look;
@@ -12,17 +12,17 @@ public struct InputData : IPlayerInput
         return Sprint;
     }
 
-    bool IPlayerInput.GetJump()
+    bool ICharacterInput.GetJump()
     {
         return Jump;
     }
 
-    Vector2 IPlayerInput.GetLook()
+    Vector2 ICharacterInput.GetLook()
     {
         return Look;
     }
 
-    Vector2 IPlayerInput.GetMove()
+    Vector2 ICharacterInput.GetMove()
     {
         return Move;
     }

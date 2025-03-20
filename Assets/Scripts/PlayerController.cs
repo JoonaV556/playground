@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerController : MonoBehaviour, IInputListener
+public class CharacterController : MonoBehaviour, IInputListener
 {
     public Transform CameraPivot;
     public Transform OrientationRoot;
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour, IInputListener
 
     private Rigidbody _rb;
 
-    private IPlayerInput _input;
+    private ICharacterInput _input;
 
     private float _cameraRotVertical = 0;
 
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour, IInputListener
     /// </summary>
     private bool _grounded = false;
 
-    public void FeedInput(IPlayerInput input)
+    public void FeedInput(ICharacterInput input)
     {
         _input = input;
         if (_input.GetJump() && !_jumpPending && IsGrounded())

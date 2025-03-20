@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IPlayerInput
+public interface ICharacterInput
 {
     public Vector2 GetMove();
     public Vector2 GetLook();
