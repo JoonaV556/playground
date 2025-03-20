@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -7,14 +6,21 @@ public class PlayerController : MonoBehaviour, IInputListener
     public Transform CameraPivot;
     public Transform OrientationRoot;
 
+    [Header("Movement Speed")]
     public float WalkForce = 10f;
     public float SprintForce = 10f;
     public float JumpForce = 1000f;
     public float MoveForceMultiplierWhileInAir = 0.1f;
+
+    [Tooltip("Extra downward force applied while in air. Imrpoves jump feel.")]
     public float ExtraGravityWhileInAir = 10f;
+
+    [Header("Drag")]
     public float DragWhileOnGround = 5f;
     public float DragWhileInAir = 0f;
-    public float LookMultiplier = 1f;
+
+    [Header("Look Settings")]
+    public float LookSensitivityMultiplier = 1f;
     public float CameraVerticalRotationUpperLimit = 90f;
     public float CameraVerticalRotationLowerLimit = -90f;
 
@@ -145,13 +151,13 @@ public class PlayerController : MonoBehaviour, IInputListener
         Vector2 look = _input.GetLook();
         if (look.magnitude > 0)
         {
-            OrientationRoot.Rotate(Vector3.up, look.x * LookMultiplier);
+            OrientationRoot.Rotate(Vector3.up, look.x * LookSensitivityMultiplier);
         }
 
         // rotate eyes vertically
         if (CameraPivot != null)
         {
-            _cameraRotVertical -= look.y * LookMultiplier;
+            _cameraRotVertical -= look.y * LookSensitivityMultiplier;
             var newCameraRot = new Vector3(
                 Mathf.Clamp(
                     _cameraRotVertical,
