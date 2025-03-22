@@ -8,6 +8,13 @@ X - Jumping
 X -- disable drag while in air and when jump starts
 X - make jumping more snappy
 - Improve ground detection
+
+- get all pivot transforms and their sphere sizes
+- delete the colliders 
+
+- in update 
+
+
 - Crouching
 - Sneaking
 - Leaning
