@@ -8,7 +8,7 @@ X - Jumping
 X -- disable drag while in air and when jump starts
 X - make jumping more snappy
 X - Improve ground detection
-- prevent infinite jumping against walls 
+X - prevent infinite jumping against walls 
 
 
 - Crouching
