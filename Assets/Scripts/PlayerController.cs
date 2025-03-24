@@ -27,9 +27,12 @@ namespace RigidBodyChracterController
         public float CameraVerticalRotationUpperLimit = 90f;
         public float CameraVerticalRotationLowerLimit = -90f;
 
+        public float GroundCheckRayLength = 0.1f;
+
         public LayerMask GroundLayers;
 
         public Transform[] GroundCheckSpherePivotTransforms;
+        public Transform[] RayGroundCheckPivotTransforms;
 
         private Rigidbody _rb;
 
@@ -154,6 +157,8 @@ namespace RigidBodyChracterController
 
         private bool IsGrounded()
         {
+            bool spheresHit = false;
+            bool raysHit = false;
             // check if we are grounded by doing multiple OverlapSphere checks below player capsule
             foreach (var (pivot, radius) in _groundCheckSpheres)
             {
@@ -164,11 +169,32 @@ namespace RigidBodyChracterController
                     GroundLayers
                 ) > 0)
                 {
-                    return true;
+                    spheresHit = true;
+                    break;
                 }
             }
 
-            return false;
+            Ray ray = new();
+            ray.direction = Vector3.down;
+            RaycastHit[] hits = new RaycastHit[1];
+
+            // check if we are grounded by doing multiple Raycasts below player capsule
+            foreach (var pivot in RayGroundCheckPivotTransforms)
+            {
+                ray.origin = pivot.position;
+                if (Physics.RaycastNonAlloc(
+                    ray,
+                    hits,
+                    GroundCheckRayLength,
+                    GroundLayers
+                ) > 0)
+                {
+                    raysHit = true;
+                    break;
+                }
+            }
+
+            return spheresHit || raysHit;
         }
 
         private bool MovingForwards(Vector2 MoveInput)
