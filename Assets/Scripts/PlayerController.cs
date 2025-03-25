@@ -30,6 +30,8 @@ namespace RigidBodyChracterController
         public float GroundCheckRayLength = 0.1f;
 
         public LayerMask GroundLayers;
+        [Tooltip(" Layers that block leaning")]
+        public LayerMask LeanObstacleLayers;
 
         public Transform[] GroundCheckSpherePivotTransforms;
         public Transform[] RayGroundCheckPivotTransforms;

@@ -23,7 +23,8 @@ public class InputManager : MonoBehaviour
         Move = Vector2.zero,
         Look = Vector2.zero,
         Sprint = false,
-        Jump = false
+        Jump = false,
+        Crouch = false
     };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -44,5 +45,6 @@ public class InputManager : MonoBehaviour
         _input.Look = InputActions["Look"].ReadValue<Vector2>();
         _input.Jump = InputActions["Jump"].WasPerformedThisFrame();
         _input.Sprint = InputActions["Sprint"].IsPressed();
+        _input.Crouch = InputActions["Crouch"].IsPressed();
     }
 }
