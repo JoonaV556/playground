@@ -6,6 +6,9 @@ namespace RigidBodyChracterController
     [RequireComponent(typeof(Rigidbody))]
     public class RBCharacterController : MonoBehaviour, IInputListener
     {
+        // Usage:
+        // - feed player input to the controller continuously - ideally each frame in Update()
+
         public Transform CameraPivot;
         public Transform OrientationRoot;
 
@@ -14,6 +17,10 @@ namespace RigidBodyChracterController
         public float SprintForce = 10f;
         public float JumpForce = 1000f;
         public float MoveForceMultiplierWhileInAir = 0.1f;
+
+        [Tooltip("How fast the character crouches etc.")]
+        [Range(0.1f, 10f)]
+        public float CrouchSpeed = 0.5f;
 
         [Tooltip("Extra downward force applied while in air. Imrpoves jump feel.")]
         public float ExtraGravityWhileInAir = 10f;
@@ -41,6 +48,10 @@ namespace RigidBodyChracterController
         private ICharacterInput _input;
 
         private float _cameraRotVertical = 0;
+        /// <summary>
+        /// 0 = standing, 1 = crouching
+        /// </summary>
+        private float _crouchAlpha = 0f;
 
         private bool _sprinting = false;
         private bool _jumpPending = false;
@@ -85,6 +96,36 @@ namespace RigidBodyChracterController
             }
         }
 
+
+
+        private void Update()
+        {
+            if (_input == null) return;
+            _grounded = IsGrounded();
+            UpdateDrag();
+            UpdateSprint(_input.GetSprint(), _input.GetMove());
+            RotatePlayer();
+            UpdateCrouch(_input.GetCrouch());
+        }
+
+
+
+        private void FixedUpdate()
+        {
+            if (_input == null) return;
+
+            MovePlayer(_input.GetMove(), GetMoveForce());
+
+            // handle jumping
+            HandleJumping();
+
+            // apply extra gravity while in air
+            if (!IsGrounded())
+            {
+                _rb.AddForce(Vector3.down.normalized * ExtraGravityWhileInAir);
+            }
+        }
+
         private Dictionary<Transform, float> GetGroundCheckSpherePivots(Transform[] gcsPivots)
         {
             Dictionary<Transform, float> gcs = new();
@@ -104,29 +145,29 @@ namespace RigidBodyChracterController
             return gcs;
         }
 
-        private void Update()
+        /// <summary>
+        /// if crouch input is true, character will attempt to crouch or stay crouched. if false character will attempt to stand back up
+        /// </summary>
+        /// <param name="CrouchInput">Whether or not character is attempting to enter crouch or stay in crouched</param>
+        private void UpdateCrouch(bool CrouchInput)
         {
-            if (_input == null) return;
-            UpdateDrag();
-            UpdateSprint(_input.GetSprint(), _input.GetMove());
-            RotatePlayer();
-            _grounded = IsGrounded();
-        }
-
-        private void FixedUpdate()
-        {
-            if (_input == null) return;
-
-            MovePlayer(_input.GetMove(), GetMoveForce());
-
-            // handle jumping
-            HandleJumping();
-
-            // apply extra gravity while in air
-            if (!IsGrounded())
+            // update crouch progress
+            if (CrouchInput)
             {
-                _rb.AddForce(Vector3.down.normalized * ExtraGravityWhileInAir);
+                // enter crouch / stay crouched
+                _crouchAlpha += Time.deltaTime * CrouchSpeed;
+
             }
+            else
+            {
+                // exit crouch / stay standing
+                _crouchAlpha -= Time.deltaTime * CrouchSpeed;
+
+                // uncrouch if no obstacles above
+            }
+            _crouchAlpha = Mathf.Clamp(_crouchAlpha, 0f, 1f);
+
+            // finally do necessary adjustments to player object
         }
 
         private void HandleJumping()
@@ -199,6 +240,11 @@ namespace RigidBodyChracterController
             return spheresHit || raysHit;
         }
 
+        /// <summary>
+        /// Checks if character is attempting to move forwards according to input vector
+        /// </summary>
+        /// <param name="MoveInput"></param>
+        /// <returns></returns>
         private bool MovingForwards(Vector2 MoveInput)
         {
             return MoveInput.y > 0.9f && MoveInput.x < 0.5f;

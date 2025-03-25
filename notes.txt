@@ -10,7 +10,10 @@ X - make jumping more snappy
 X - Improve ground detection
 X - prevent infinite jumping against walls 
 
-
 - Crouching
+-- player body adjustments
+-- uncrouch obstruction checks
+
+
 - Sneaking
 - Leaning
