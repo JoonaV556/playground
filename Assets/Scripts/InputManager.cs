@@ -10,7 +10,8 @@ public class InputManager : MonoBehaviour
             Move = _input.Move,
             Look = _input.Look,
             Jump = _input.Jump,
-            Sprint = _input.Sprint
+            Sprint = _input.Sprint,
+            Crouch = _input.Crouch
         };
 
         return input;

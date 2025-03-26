@@ -3453,7 +3453,7 @@ MonoBehaviour:
   SprintForce: 10000
   JumpForce: 500
   MoveForceMultiplierWhileInAir: 0.05
-  CrouchSpeed: 0.5
+  CrouchSpeed: 5
   ExtraGravityWhileInAir: 550
   DragWhileOnGround: 10.41
   DragWhileInAir: 0
