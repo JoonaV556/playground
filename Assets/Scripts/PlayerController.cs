@@ -40,10 +40,21 @@ namespace RigidBodyChracterController
         [Tooltip(" Layers that block leaning")]
         public LayerMask LeanObstacleLayers;
 
+        [Header("Crouch Settings")]
+        public Transform BodyVisualTransform;
+        public Transform HeadPivotTransform;
+        public CapsuleCollider CapsuleCollider;
+        public Vector2 CrouchScalesBodyVisual = new Vector2(1, 0.5f);
+        public Vector2 CrouchHeightsCapsuleCollider = new Vector2(2f, 1f);
+        public Vector2 CrouchCapsuleColliderYCenter = new Vector2(1f, 0.5f);
+        public Vector2 CrouchHeadPivotYPosition = new Vector2(1.5f, 0.5f);
+
+        [Header("Ground check pivots")]
         public Transform[] GroundCheckSpherePivotTransforms;
         public Transform[] RayGroundCheckPivotTransforms;
 
         private Rigidbody _rb;
+        private Transform _capsuleColliderTransform;
 
         private ICharacterInput _input;
 
@@ -80,6 +91,7 @@ namespace RigidBodyChracterController
         {
             _rb = GetComponent<Rigidbody>();
             _rb.linearDamping = DragWhileOnGround;
+            _capsuleColliderTransform = CapsuleCollider.transform;
         }
 
         private void Start()
@@ -96,8 +108,6 @@ namespace RigidBodyChracterController
             }
         }
 
-
-
         private void Update()
         {
             if (_input == null) return;
@@ -107,8 +117,6 @@ namespace RigidBodyChracterController
             RotatePlayer();
             UpdateCrouch(_input.GetCrouch());
         }
-
-
 
         private void FixedUpdate()
         {
@@ -168,6 +176,34 @@ namespace RigidBodyChracterController
             _crouchAlpha = Mathf.Clamp(_crouchAlpha, 0f, 1f);
 
             // finally do necessary adjustments to player object
+            BodyVisualTransform.localScale = Vector3.Lerp(
+                new Vector3(BodyVisualTransform.localScale.x, CrouchScalesBodyVisual.x, BodyVisualTransform.localScale.z),
+                new Vector3(BodyVisualTransform.localScale.x, CrouchScalesBodyVisual.y, BodyVisualTransform.localScale.z),
+                _crouchAlpha
+            );
+            CapsuleCollider.height = Mathf.Lerp(
+                CrouchHeightsCapsuleCollider.x,
+                CrouchHeightsCapsuleCollider.y,
+                _crouchAlpha
+            );
+            CapsuleCollider.center = new Vector3(
+                CapsuleCollider.center.x,
+                Mathf.Lerp(
+                    CrouchCapsuleColliderYCenter.x,
+                    CrouchCapsuleColliderYCenter.y,
+                    _crouchAlpha
+                ),
+                CapsuleCollider.center.z
+            );
+            HeadPivotTransform.localPosition = new Vector3(
+                HeadPivotTransform.localPosition.x,
+                Mathf.Lerp(
+                    CrouchHeadPivotYPosition.x,
+                    CrouchHeadPivotYPosition.y,
+                    _crouchAlpha
+                ),
+                HeadPivotTransform.localPosition.z
+            );
         }
 
         private void HandleJumping()

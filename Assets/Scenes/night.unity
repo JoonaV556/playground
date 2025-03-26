@@ -359,7 +359,7 @@ Transform:
   m_GameObject: {fileID: 138982289}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1424,7 +1424,7 @@ Transform:
   m_GameObject: {fileID: 848049239}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1461,7 +1461,7 @@ Transform:
   m_GameObject: {fileID: 884978097}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2842,7 +2842,7 @@ Transform:
   m_GameObject: {fileID: 7894599557275755480}
   serializedVersion: 2
   m_LocalRotation: {x: 0.70692676, y: -0, z: -0, w: 0.70728683}
-  m_LocalPosition: {x: 0, y: 1.473, z: 0.418}
+  m_LocalPosition: {x: 0, y: 0, z: 0.418}
   m_LocalScale: {x: 0.63938, y: 0.13042712, z: 0.35521394}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3119,7 +3119,7 @@ Transform:
   m_GameObject: {fileID: 5959858404280935485}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.473, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3453,6 +3453,7 @@ MonoBehaviour:
   SprintForce: 10000
   JumpForce: 500
   MoveForceMultiplierWhileInAir: 0.05
+  CrouchSpeed: 0.5
   ExtraGravityWhileInAir: 550
   DragWhileOnGround: 10.41
   DragWhileInAir: 0
@@ -3466,6 +3467,13 @@ MonoBehaviour:
   LeanObstacleLayers:
     serializedVersion: 2
     m_Bits: 0
+  BodyVisualTransform: {fileID: 4932762741919979965}
+  HeadPivotTransform: {fileID: 848049240}
+  CapsuleCollider: {fileID: 5353338643902241459}
+  CrouchScalesBodyVisual: {x: 1, y: 0.5}
+  CrouchHeightsCapsuleCollider: {x: 2, y: 1}
+  CrouchCapsuleColliderYCenter: {x: 0, y: -0.5}
+  CrouchHeadPivotYPosition: {x: 1.5, y: 0.5}
   GroundCheckSpherePivotTransforms:
   - {fileID: 814974847720486211}
   - {fileID: 7696788255205126613}

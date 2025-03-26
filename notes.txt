@@ -9,11 +9,21 @@ X -- disable drag while in air and when jump starts
 X - make jumping more snappy
 X - Improve ground detection
 X - prevent infinite jumping against walls 
-
 - Crouching
+
 -- player body adjustments
+--- body visual y scale 
+1 - 0.5
+--- capsule collider height
+2 - 1 
+--- capsule collider y position
+1 - 0.5
+--- camera
+
 -- uncrouch obstruction checks
 
 
 - Sneaking
 - Leaning
+-- move head pivot left and right
+-- orient head pivot 
