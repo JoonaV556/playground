@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.WSA;
 
 namespace RigidBodyChracterController
 {
@@ -39,6 +40,7 @@ namespace RigidBodyChracterController
         public LayerMask GroundLayers;
         [Tooltip(" Layers that block leaning")]
         public LayerMask LeanObstacleLayers;
+        public LayerMask UncrouchObstacleLayers;
 
         [Header("Crouch Settings")]
         public Transform BodyVisualTransform;
@@ -169,29 +171,64 @@ namespace RigidBodyChracterController
             else
             {
                 // exit crouch / stay standing
-                _crouchAlpha -= Time.deltaTime * CrouchSpeed;
+                float _crouchAlphaBeforeObstacleCheck = _crouchAlpha;
+                float newCrouchAlpha = _crouchAlpha - Time.deltaTime * CrouchSpeed;
 
-                // uncrouch if no obstacles above
+                // check if there is an obstacle above the player
+                Vector3 headPivotPositionBeforeObstacleCheck = HeadPivotTransform.localPosition;
+                // temporarily raise head pivot to check for obstacles
+                HeadPivotTransform.localPosition = new Vector3(
+                    HeadPivotTransform.localPosition.x,
+                    Mathf.Lerp(
+                        CrouchHeadPivotYPosition.x,
+                        CrouchHeadPivotYPosition.y,
+                        newCrouchAlpha
+                    ),
+                    HeadPivotTransform.localPosition.z
+                    );
+
+                bool isObstacleAbove = Physics.CheckSphere(
+                    HeadPivotTransform.position,
+                    0.5f,
+                    LeanObstacleLayers
+                );
+
+                if (!isObstacleAbove)
+                {
+                    // if no obstacle above, allow uncrouch
+                    _crouchAlpha = newCrouchAlpha;
+                }
+                else
+                {
+                    // if there is an obstacle above, prevent uncrouch
+                    _crouchAlpha = _crouchAlphaBeforeObstacleCheck;
+                    HeadPivotTransform.localPosition = headPivotPositionBeforeObstacleCheck;
+                }
             }
             _crouchAlpha = Mathf.Clamp(_crouchAlpha, 0f, 1f);
 
             // finally do necessary adjustments to player object
+            ApplyCrouchChanges(_crouchAlpha);
+        }
+
+        private void ApplyCrouchChanges(float crouchAlpha)
+        {
             BodyVisualTransform.localScale = Vector3.Lerp(
-                new Vector3(BodyVisualTransform.localScale.x, CrouchScalesBodyVisual.x, BodyVisualTransform.localScale.z),
-                new Vector3(BodyVisualTransform.localScale.x, CrouchScalesBodyVisual.y, BodyVisualTransform.localScale.z),
-                _crouchAlpha
-            );
+                            new Vector3(BodyVisualTransform.localScale.x, CrouchScalesBodyVisual.x, BodyVisualTransform.localScale.z),
+                            new Vector3(BodyVisualTransform.localScale.x, CrouchScalesBodyVisual.y, BodyVisualTransform.localScale.z),
+                            crouchAlpha
+                        );
             CapsuleCollider.height = Mathf.Lerp(
                 CrouchHeightsCapsuleCollider.x,
                 CrouchHeightsCapsuleCollider.y,
-                _crouchAlpha
+                crouchAlpha
             );
             CapsuleCollider.center = new Vector3(
                 CapsuleCollider.center.x,
                 Mathf.Lerp(
                     CrouchCapsuleColliderYCenter.x,
                     CrouchCapsuleColliderYCenter.y,
-                    _crouchAlpha
+                    crouchAlpha
                 ),
                 CapsuleCollider.center.z
             );
@@ -200,7 +237,7 @@ namespace RigidBodyChracterController
                 Mathf.Lerp(
                     CrouchHeadPivotYPosition.x,
                     CrouchHeadPivotYPosition.y,
-                    _crouchAlpha
+                    crouchAlpha
                 ),
                 HeadPivotTransform.localPosition.z
             );

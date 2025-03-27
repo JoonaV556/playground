@@ -10,10 +10,10 @@ X - make jumping more snappy
 X - Improve ground detection
 X - prevent infinite jumping against walls 
 X - Crouching
--- uncrouch obstruction checks - prevent player from crouching if there are obstacles above
+X -- uncrouch obstruction checks - prevent player from crouching if there are obstacles above
 
-
-- Sneaking
 - Leaning
 -- move head pivot left and right
 -- orient head pivot 
+
+- Sneaking
