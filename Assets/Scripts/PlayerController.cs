@@ -256,11 +256,11 @@ namespace RigidBodyChracterController
         private void UpdateSprint(bool SprintInput, Vector2 MoveInput)
         {
             // handle sprinting 
-            if (!_sprinting && SprintInput && MovingForwards(MoveInput))
+            if (!_sprinting && SprintInput && MovingForwards(MoveInput) && (_crouchAlpha < 0.01f))
             {
                 _sprinting = true;
             }
-            else if (_sprinting && (!SprintInput || !MovingForwards(MoveInput)))
+            else if (_sprinting && (!SprintInput || !MovingForwards(MoveInput) || (_crouchAlpha > 0.01f)))
             {
                 _sprinting = false;
             }
