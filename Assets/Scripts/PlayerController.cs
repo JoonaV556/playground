@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.WSA;
 
 namespace RigidBodyChracterController
 {
@@ -44,12 +43,17 @@ namespace RigidBodyChracterController
 
         [Header("Crouch Settings")]
         public Transform BodyVisualTransform;
-        public Transform HeadPivotTransform;
+        public Transform HeadCrouchPivotTransform;
         public CapsuleCollider CapsuleCollider;
         public Vector2 CrouchScalesBodyVisual = new Vector2(1, 0.5f);
         public Vector2 CrouchHeightsCapsuleCollider = new Vector2(2f, 1f);
         public Vector2 CrouchCapsuleColliderYCenter = new Vector2(1f, 0.5f);
         public Vector2 CrouchHeadPivotYPosition = new Vector2(1.5f, 0.5f);
+
+        [Header("Leaning")]
+        public Transform LeanHeadPivotTransform;
+        public Vector3 LeanHeadPositionOffset = new Vector3(0, 0, 0);
+        public float LeanHeadRotationOffset = 30f;
 
         [Header("Ground check pivots")]
         public Transform[] GroundCheckSpherePivotTransforms;
@@ -175,20 +179,20 @@ namespace RigidBodyChracterController
                 float newCrouchAlpha = _crouchAlpha - Time.deltaTime * CrouchSpeed;
 
                 // check if there is an obstacle above the player
-                Vector3 headPivotPositionBeforeObstacleCheck = HeadPivotTransform.localPosition;
+                Vector3 headPivotPositionBeforeObstacleCheck = HeadCrouchPivotTransform.localPosition;
                 // temporarily raise head pivot to check for obstacles
-                HeadPivotTransform.localPosition = new Vector3(
-                    HeadPivotTransform.localPosition.x,
+                HeadCrouchPivotTransform.localPosition = new Vector3(
+                    HeadCrouchPivotTransform.localPosition.x,
                     Mathf.Lerp(
                         CrouchHeadPivotYPosition.x,
                         CrouchHeadPivotYPosition.y,
                         newCrouchAlpha
                     ),
-                    HeadPivotTransform.localPosition.z
+                    HeadCrouchPivotTransform.localPosition.z
                     );
 
                 bool isObstacleAbove = Physics.CheckSphere(
-                    HeadPivotTransform.position,
+                    HeadCrouchPivotTransform.position,
                     0.5f,
                     LeanObstacleLayers
                 );
@@ -202,7 +206,7 @@ namespace RigidBodyChracterController
                 {
                     // if there is an obstacle above, prevent uncrouch
                     _crouchAlpha = _crouchAlphaBeforeObstacleCheck;
-                    HeadPivotTransform.localPosition = headPivotPositionBeforeObstacleCheck;
+                    HeadCrouchPivotTransform.localPosition = headPivotPositionBeforeObstacleCheck;
                 }
             }
             _crouchAlpha = Mathf.Clamp(_crouchAlpha, 0f, 1f);
@@ -232,14 +236,14 @@ namespace RigidBodyChracterController
                 ),
                 CapsuleCollider.center.z
             );
-            HeadPivotTransform.localPosition = new Vector3(
-                HeadPivotTransform.localPosition.x,
+            HeadCrouchPivotTransform.localPosition = new Vector3(
+                HeadCrouchPivotTransform.localPosition.x,
                 Mathf.Lerp(
                     CrouchHeadPivotYPosition.x,
                     CrouchHeadPivotYPosition.y,
                     crouchAlpha
                 ),
-                HeadPivotTransform.localPosition.z
+                HeadCrouchPivotTransform.localPosition.z
             );
         }
 

@@ -11,7 +11,9 @@ public class InputManager : MonoBehaviour
             Look = _input.Look,
             Jump = _input.Jump,
             Sprint = _input.Sprint,
-            Crouch = _input.Crouch
+            Crouch = _input.Crouch,
+            LeanLeft = _input.LeanLeft,
+            LeanRight = _input.LeanRight
         };
 
         return input;
@@ -25,7 +27,9 @@ public class InputManager : MonoBehaviour
         Look = Vector2.zero,
         Sprint = false,
         Jump = false,
-        Crouch = false
+        Crouch = false,
+        LeanLeft = false,
+        LeanRight = false
     };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -47,5 +51,7 @@ public class InputManager : MonoBehaviour
         _input.Jump = InputActions["Jump"].WasPerformedThisFrame();
         _input.Sprint = InputActions["Sprint"].IsPressed();
         _input.Crouch = InputActions["Crouch"].IsPressed();
+        _input.LeanLeft = InputActions["LeanLeft"].IsPressed();
+        _input.LeanRight = InputActions["LeanRight"].IsPressed();
     }
 }

@@ -7,4 +7,6 @@ public interface ICharacterInput
     public bool GetJump();
     public bool GetSprint();
     public bool GetCrouch();
+    public bool GetLeanLeft();
+    public bool GetLeanRight();
 }

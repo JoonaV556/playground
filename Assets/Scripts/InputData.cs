@@ -7,17 +7,28 @@ public struct InputData : ICharacterInput
     public bool Jump;
     public bool Sprint;
     public bool Crouch;
+    public bool LeanLeft;
+    public bool LeanRight;
 
     public bool GetCrouch()
     {
         return Crouch;
     }
 
+    bool ICharacterInput.GetLeanLeft()
+    {
+        return LeanLeft;
+    }
+
+    bool ICharacterInput.GetLeanRight()
+    {
+        return LeanRight;
+    }
+
     public bool GetSprint()
     {
         return Sprint;
     }
-
 
     bool ICharacterInput.GetJump()
     {

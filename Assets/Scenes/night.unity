@@ -386,6 +386,40 @@ MonoBehaviour:
   SmoothPosition: 0
   PositionAlpha: 0.95
   PositionMultiplier: 1
+--- !u!1 &178831260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 178831261}
+  m_Layer: 3
+  m_Name: Head Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &178831261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178831260}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2689134370867743117}
+  - {fileID: 884978098}
+  - {fileID: 402963908585960500}
+  m_Father: {fileID: 848049240}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &193234438
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,7 +1028,7 @@ GameObject:
   m_Component:
   - component: {fileID: 326850362}
   m_Layer: 3
-  m_Name: Leaning root pivot
+  m_Name: Crouch Head Pivot (Vertical movement)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1746,7 +1780,7 @@ GameObject:
   m_Component:
   - component: {fileID: 848049240}
   m_Layer: 3
-  m_Name: head pivot
+  m_Name: Lean Head Pivot (Horizontal movement)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1765,9 +1799,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2689134370867743117}
-  - {fileID: 884978098}
-  - {fileID: 402963908585960500}
+  - {fileID: 178831261}
   m_Father: {fileID: 326850362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &884978097
@@ -1802,7 +1834,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 848049240}
+  m_Father: {fileID: 178831261}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &884978099
 SphereCollider:
@@ -3292,7 +3324,7 @@ Transform:
   m_LocalScale: {x: 0.63938, y: 0.13042712, z: 0.35521394}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 848049240}
+  m_Father: {fileID: 178831261}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!135 &416265663068696066
 SphereCollider:
@@ -3569,7 +3601,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 848049240}
+  m_Father: {fileID: 178831261}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &2778108807632680816
 SphereCollider:
@@ -3917,12 +3949,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 55
   BodyVisualTransform: {fileID: 4932762741919979965}
-  HeadPivotTransform: {fileID: 326850362}
+  HeadCrouchPivotTransform: {fileID: 326850362}
   CapsuleCollider: {fileID: 5353338643902241459}
   CrouchScalesBodyVisual: {x: 1, y: 0.5}
   CrouchHeightsCapsuleCollider: {x: 2, y: 1}
   CrouchCapsuleColliderYCenter: {x: 0, y: -0.5}
   CrouchHeadPivotYPosition: {x: 1.5, y: 0.5}
+  LeanHeadPivotTransform: {fileID: 848049240}
+  LeanHeadPositionOffset: {x: 0.807, y: -0.098, z: 0}
+  LeanHeadRotationOffset: 30
   GroundCheckSpherePivotTransforms:
   - {fileID: 814974847720486211}
   - {fileID: 7696788255205126613}
