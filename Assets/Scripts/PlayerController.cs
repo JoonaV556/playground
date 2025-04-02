@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace RigidBodyChracterController
@@ -54,6 +55,7 @@ namespace RigidBodyChracterController
         public Transform LeanHeadPivotTransform;
         public Vector3 LeanHeadPositionOffset = new Vector3(0, 0, 0);
         public float LeanHeadRotationOffset = 30f;
+        public float LeanSpeed = 1f;
 
         [Header("Ground check pivots")]
         public Transform[] GroundCheckSpherePivotTransforms;
@@ -69,6 +71,15 @@ namespace RigidBodyChracterController
         /// 0 = standing, 1 = crouching
         /// </summary>
         private float _crouchAlpha = 0f;
+
+        /// <summary>
+        /// 0 = not leaning, 1 = leaning left
+        /// </summary>
+        private float _leanLeftAlpha = 0f;
+        /// <summary>
+        /// 0 = not leaning, 1 = leaning right
+        /// </summary>
+        private float _leanRightAlpha = 0f;
 
         private bool _sprinting = false;
         private bool _jumpPending = false;
@@ -122,6 +133,7 @@ namespace RigidBodyChracterController
             UpdateSprint(_input.GetSprint(), _input.GetMove());
             RotatePlayer();
             UpdateCrouch(_input.GetCrouch());
+            UpdateLeaning(_input.GetLeanLeft(), _input.GetLeanRight());
         }
 
         private void FixedUpdate()
@@ -138,6 +150,21 @@ namespace RigidBodyChracterController
             {
                 _rb.AddForce(Vector3.down.normalized * ExtraGravityWhileInAir);
             }
+        }
+
+        private void UpdateLeaning(bool LeanLeftInput, bool LeanRightInput)
+        {
+            // debug log lean input
+            Debug.Log($"LeanLeftInput: {LeanLeftInput}, LeanRightInput: {LeanRightInput}");
+
+            _leanLeftAlpha = Mathf.Clamp(_leanLeftAlpha, 0f, 1f);
+            _leanRightAlpha = Mathf.Clamp(_leanLeftAlpha, 0f, 1f);
+
+            // LeanHeadPivotTransform.localPosition = Vector3.Lerp(
+            //     Vector3.zero,
+            //     leanHeadTargetPosition,
+            //     Time.deltaTime * LeanSpeed
+            // );
         }
 
         private Dictionary<Transform, float> GetGroundCheckSpherePivots(Transform[] gcsPivots)
