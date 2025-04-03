@@ -14,6 +14,7 @@ X -- uncrouch obstruction checks - prevent player from crouching if there are ob
 
 - Leaning
 -- move head pivot left and right
--- orient head pivot 
+-- Lean only if no obstacle in way
+-- Tilt head
 
 - Sneaking

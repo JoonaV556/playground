@@ -3958,6 +3958,7 @@ MonoBehaviour:
   LeanHeadPivotTransform: {fileID: 848049240}
   LeanHeadPositionOffset: {x: 0.807, y: -0.098, z: 0}
   LeanHeadRotationOffset: 30
+  LeanSpeed: 7
   GroundCheckSpherePivotTransforms:
   - {fileID: 814974847720486211}
   - {fileID: 7696788255205126613}

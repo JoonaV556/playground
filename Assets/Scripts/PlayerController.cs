@@ -81,6 +81,9 @@ namespace RigidBodyChracterController
         /// </summary>
         private float _leanRightAlpha = 0f;
 
+        private bool _leaningLeft = false;
+        private bool _leaningRight = false;
+
         private bool _sprinting = false;
         private bool _jumpPending = false;
         /// <summary>
@@ -157,14 +160,61 @@ namespace RigidBodyChracterController
             // debug log lean input
             Debug.Log($"LeanLeftInput: {LeanLeftInput}, LeanRightInput: {LeanRightInput}");
 
+            // Update lean state
+            if (LeanLeftInput && !LeaningRight())
+            {
+                // lean further left
+                _leanLeftAlpha += Time.deltaTime * LeanSpeed;
+                _leaningLeft = true;
+            }
+            if (!LeanLeftInput && _leaningLeft)
+            {
+                // return back to center
+                _leanLeftAlpha -= Time.deltaTime * LeanSpeed;
+                if (_leanLeftAlpha < 0.01f)
+                {
+                    _leanLeftAlpha = 0f;
+                    _leaningLeft = false;
+                }
+            }
+
+            // lean further right
+            if (LeanRightInput && !LeaningLeft())
+            {
+                _leanRightAlpha += Time.deltaTime * LeanSpeed;
+                _leaningRight = true;
+            }
+            // return back to center
+            if (!LeanRightInput && _leaningRight)
+            {
+                // return back to center
+                _leanRightAlpha -= Time.deltaTime * LeanSpeed;
+                if (_leanRightAlpha < 0.01f)
+                {
+                    _leanRightAlpha = 0f;
+                    _leaningRight = false;
+                }
+            }
+
+            // Limit lean alpha 
             _leanLeftAlpha = Mathf.Clamp(_leanLeftAlpha, 0f, 1f);
             _leanRightAlpha = Mathf.Clamp(_leanLeftAlpha, 0f, 1f);
 
-            // LeanHeadPivotTransform.localPosition = Vector3.Lerp(
-            //     Vector3.zero,
-            //     leanHeadTargetPosition,
-            //     Time.deltaTime * LeanSpeed
-            // );
+            // Appply lean changes to player object
+            LeanHeadPivotTransform.localPosition = Vector3.Lerp(
+                Vector3.zero,
+                LeanHeadPositionOffset,
+                _leanLeftAlpha
+            );
+        }
+
+        private bool LeaningLeft()
+        {
+            return _leaningLeft;
+        }
+        private bool LeaningRight()
+        {
+            return _leaningRight;
         }
 
         private Dictionary<Transform, float> GetGroundCheckSpherePivots(Transform[] gcsPivots)
@@ -287,11 +337,11 @@ namespace RigidBodyChracterController
         private void UpdateSprint(bool SprintInput, Vector2 MoveInput)
         {
             // handle sprinting 
-            if (!_sprinting && SprintInput && MovingForwards(MoveInput) && (_crouchAlpha < 0.01f))
+            if (!_sprinting && SprintInput && IsMovingStraightForward(MoveInput) && (_crouchAlpha < 0.01f))
             {
                 _sprinting = true;
             }
-            else if (_sprinting && (!SprintInput || !MovingForwards(MoveInput) || (_crouchAlpha > 0.01f)))
+            else if (_sprinting && (!SprintInput || !IsMovingStraightForward(MoveInput) || (_crouchAlpha > 0.01f)))
             {
                 _sprinting = false;
             }
@@ -349,7 +399,7 @@ namespace RigidBodyChracterController
         /// </summary>
         /// <param name="MoveInput"></param>
         /// <returns></returns>
-        private bool MovingForwards(Vector2 MoveInput)
+        private bool IsMovingStraightForward(Vector2 MoveInput)
         {
             return MoveInput.y > 0.9f && MoveInput.x < 0.5f;
         }
